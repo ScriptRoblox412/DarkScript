@@ -67,8 +67,8 @@ warning.TextScaled = true
 task.spawn(function()
 	for i = 1, 100 do
 		percent.Text = i .. "%"
-		barFill:TweenSize(UDim2.new(i / 100, 0, 1, 0), "Out", "Quad", 0.1, true)
-		wait(0.3)
+		barFill:TweenSize(UDim2.new(i / 100, 0, 1, 0), "Out", "Quad", 0.3, true)
+		wait(1.2)
 	end
 	loadingGui:Destroy()
 end)
