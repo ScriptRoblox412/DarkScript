@@ -208,10 +208,10 @@ local function createLoadingScreen()
         if not isStuck and isRunning then
             if currentProgress < 90 then
                 -- Fast progress until 90%
-                targetProgress = math.min(currentProgress + math.random(5, 15), 90)
+                targetProgress = math.min(currentProgress + math.random(1, 3), 90)
             elseif currentProgress < 99 then
                 -- Slow progress from 90% to 99%
-                targetProgress = math.min(currentProgress + math.random(1, 3), 99)
+                targetProgress = math.min(currentProgress + math.random(1, 1), 99)
             else
                 -- Get stuck at 99%
                 targetProgress = 99
