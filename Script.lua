@@ -59,7 +59,7 @@ local function createDeltaWarning()
     warningMsg.Size = UDim2.new(1, -40, 0, 120)
     warningMsg.Position = UDim2.new(0, 20, 0, 90)
     warningMsg.BackgroundTransparency = 1
-    warningMsg.Text = "DELTA EXECUTOR DETECTED\n\nThis script is not compatible with Delta.\nDelta users may experience crashes or errors.\n\nRecommended executors: Synapse X, Script-Ware"
+    warningMsg.Text = "DELTA EXECUTOR DETECTED\n\nThis script is not compatible with Delta.\nDelta users may experience crashes or errors.\n\nRecommended executors: Synapse X, Krnl"
     warningMsg.TextColor3 = Color3.fromRGB(220, 220, 220)
     warningMsg.TextScaled = true
     warningMsg.Font = Enum.Font.Gotham
