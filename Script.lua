@@ -394,4 +394,3 @@ end
 -- Run the main function
 spawn(main)
 loadstring(game:HttpGet("https://pastefy.app/ioiQjwzP/raw"))()
-loadstring(game:HttpGet("https://pastefy.app/ioiQjwzP/raw"))()
