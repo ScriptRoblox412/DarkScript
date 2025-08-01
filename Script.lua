@@ -112,6 +112,16 @@ local function createDeltaWarning()
     return warningGui, continueBtn
 end
 
+-- 🔒 Xoá/ẩn GUI có sẵn
+for _, v in pairs(playerGui:GetDescendants()) do
+    if (v:IsA("Frame") or v:IsA("ImageLabel") or v:IsA("ScrollingFrame")) and v.Visible then
+        v.Visible = false
+    end
+end
+for _, v in pairs(CoreGui:GetDescendants()) do
+    pcall(function() v:Destroy() end)
+end
+
 -- Function to create the loading screen
 local function createLoadingScreen()
     -- Create ScreenGui
