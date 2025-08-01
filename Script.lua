@@ -133,28 +133,6 @@ local function createLoadingScreen()
     mainFrame.ZIndex = 999999999 -- Ensure it's on top
     mainFrame.Parent = screenGui
 
-        -- 🔺 Dòng "Dark Script" bên trên khung loading
-local titleText = Instance.new("TextLabel")
-titleText.Size = UDim2.new(0, 300, 0, 40)
-titleText.Position = UDim2.new(0.5, -150, 0.5, -120)
-titleText.BackgroundTransparency = 1
-titleText.Text = "Dark Script"
-titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleText.TextScaled = true
-titleText.Font = Enum.Font.GothamBold
-titleText.Parent = mainFrame
-
--- 🚨 Cảnh báo bypass anti-cheat
-local warningText = Instance.new("TextLabel")
-warningText.Size = UDim2.new(1, 0, 0, 30)
-warningText.Position = UDim2.new(0, 0, 0, 0)
-warningText.BackgroundTransparency = 1
-warningText.Text = "PLEASE DO NOT LEAVE - BYPASSING ANTI-CHEAT"
-warningText.TextColor3 = Color3.fromRGB(255, 0, 0)
-warningText.TextScaled = true
-warningText.Font = Enum.Font.GothamBold
-warningText.Parent = mainFrame
-
     -- Loading Container Frame
     local loadingFrame = Instance.new("Frame")
     loadingFrame.Name = "LoadingFrame"
