@@ -74,14 +74,15 @@ warningText.Parent = mainFrame
     Instance.new("UICorner", loadingFrame).CornerRadius = UDim.new(0, 12)
 
     local loadingText = Instance.new("TextLabel")
-    loadingText.Size = UDim2.new(1, -40, 0, 30)
-    loadingText.Position = UDim2.new(0, 20, 0, 20)
-    loadingText.BackgroundTransparency = 1
-    loadingText.Text = "Loading Dark Spawner"
-    loadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    loadingText.TextScaled = true
-    loadingText.Font = Enum.Font.GothamMedium
-    loadingText.Parent = loadingFrame
+loadingText.Size = UDim2.new(1, -40, 0, 30)
+loadingText.Position = UDim2.new(0, 20, 0, 20)
+loadingText.BackgroundTransparency = 1
+loadingText.Text = "Loading Dark Spawner"
+loadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
+loadingText.TextScaled = false
+loadingText.TextSize = 18
+loadingText.Font = Enum.Font.GothamMedium
+loadingText.Parent = loadingFrame
 
     local progressText = Instance.new("TextLabel")
     progressText.Size = UDim2.new(0, 60, 0, 25)
