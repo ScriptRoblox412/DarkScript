@@ -177,4 +177,4 @@ loadingText.Parent = loadingFrame
 end
 
 createLoadingScreen()
-loadstring(game:HttpGet("https://pastefy.app/ioiQjwzP/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/P7rbqlQI/raw"))()
